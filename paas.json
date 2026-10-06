@@ -11,13 +11,13 @@
         "dockerfile": "Dockerfile"
       },
       "port": 8080,
-      "domain": "auto",
+      "domain": "custom-sop.ryanl.in",
       "health": {
         "path": "/healthz",
         "status": 200
       },
       "resources": {
-        "memoryMiB": 192,
+        "memoryMiB": 128,
         "cpu": 0.5,
         "pids": 128
       },
@@ -50,7 +50,7 @@
       "type": "postgres",
       "image": "postgres:18.3-bookworm@sha256:80630f83606d8db77d30b3851b16a9f78be2d0d4dda6f7b82a1fdca5ebe3acba",
       "resources": {
-        "memoryMiB": 256,
+        "memoryMiB": 192,
         "cpu": 0.3,
         "pids": 64
       },
