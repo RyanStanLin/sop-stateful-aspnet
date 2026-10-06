@@ -3,3 +3,6 @@
 .git
 .env*
 TestResults
+
+paas.secrets.json
+local-data
