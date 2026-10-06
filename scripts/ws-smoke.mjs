@@ -1,6 +1,6 @@
 const origin = process.argv[2];
 if (!origin) throw new Error('Usage: node scripts/ws-smoke.mjs https://project.ryanl.in');
-const url = new URL('/ws', origin); url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+const url = new URL(process.argv[3] || '/ws', origin); url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
 const socket = new WebSocket(url);
 const deadline = setTimeout(() => { socket.close(); console.error('WebSocket timeout'); process.exitCode = 1; }, 10000);
 socket.addEventListener('open', () => socket.send('personal-paas-websocket-proof'));

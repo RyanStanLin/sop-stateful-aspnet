@@ -11,7 +11,7 @@
         "dockerfile": "Dockerfile"
       },
       "port": 8080,
-      "domain": "custom-sop.ryanl.in",
+      "domain": "endpoint.ryanl.in",
       "health": {
         "path": "/healthz",
         "status": 200
@@ -44,7 +44,15 @@
           "name": "app-config",
           "target": "/data"
         }
-      ]
+      ],
+      "routing": {
+        "sharedGroup": "endpoint",
+        "paths": [
+          "/api/adduser",
+          "/api/data",
+          "/ws"
+        ]
+      }
     },
     "postgres": {
       "type": "postgres",
@@ -85,6 +93,27 @@
           "target": "/data"
         }
       ]
+    },
+    "worker": {
+      "type": "worker",
+      "build": {
+        "context": "examples/worker",
+        "dockerfile": "examples/worker/Dockerfile"
+      },
+      "resources": {
+        "memoryMiB": 128,
+        "cpu": 0.1,
+        "pids": 32
+      },
+      "dependsOn": [
+        "redis"
+      ],
+      "environment": {
+        "REDIS_HOST": "redis"
+      },
+      "secretRefs": {
+        "REDIS_PASSWORD": "REDIS_PASSWORD"
+      }
     }
   }
 }
