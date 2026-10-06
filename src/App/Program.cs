@@ -13,6 +13,7 @@ app.MapGet("/", () => Results.Content("""
     <p><a href="/api/hello?name=Ryan">示例 API</a> · <a href="/healthz">健康检查</a> · WebSocket: /ws</p></html>
     """, "text/html; charset=utf-8"));
 app.MapGet("/api/hello", (string? name) => Results.Json(Greeting.Create(name ?? "world")));
+app.MapGet("/api/adduser", () => Results.Json(new { service = "user", status = "ready" }));
 app.Run();
 public partial class Program;
 public static class Greeting

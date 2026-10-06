@@ -21,8 +21,70 @@
         "cpu": 0.5,
         "pids": 128
       },
-      "environment": {},
-      "secretRefs": {}
+      "environment": {
+        "DATABASE_HOST": "postgres",
+        "DATABASE_PORT": "5432",
+        "DATABASE_NAME": "app",
+        "DATABASE_USER": "app",
+        "REDIS_HOST": "redis",
+        "REDIS_PORT": "6379",
+        "CONFIG_PATH": "/data/config.json"
+      },
+      "secretRefs": {
+        "DATABASE_PASSWORD": "POSTGRES_PASSWORD",
+        "REDIS_PASSWORD": "REDIS_PASSWORD",
+        "API_TOKEN": "API_TOKEN"
+      },
+      "dependsOn": [
+        "postgres",
+        "redis"
+      ],
+      "volumes": [
+        {
+          "name": "app-config",
+          "target": "/data"
+        }
+      ]
+    },
+    "postgres": {
+      "type": "postgres",
+      "image": "postgres:18.3-bookworm@sha256:80630f83606d8db77d30b3851b16a9f78be2d0d4dda6f7b82a1fdca5ebe3acba",
+      "resources": {
+        "memoryMiB": 256,
+        "cpu": 0.3,
+        "pids": 64
+      },
+      "environment": {
+        "POSTGRES_USER": "app",
+        "POSTGRES_DB": "app"
+      },
+      "secretRefs": {
+        "POSTGRES_PASSWORD": "POSTGRES_PASSWORD"
+      },
+      "volumes": [
+        {
+          "name": "postgres-data",
+          "target": "/var/lib/postgresql"
+        }
+      ]
+    },
+    "redis": {
+      "type": "redis",
+      "image": "redis:8.2.2-bookworm@sha256:4521b581dbddea6e7d81f8fe95ede93f5648aaa66a9dacd581611bf6fe7527bd",
+      "resources": {
+        "memoryMiB": 64,
+        "cpu": 0.2,
+        "pids": 32
+      },
+      "secretRefs": {
+        "REDIS_PASSWORD": "REDIS_PASSWORD"
+      },
+      "volumes": [
+        {
+          "name": "redis-data",
+          "target": "/data"
+        }
+      ]
     }
   }
 }
