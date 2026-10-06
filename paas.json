@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "name": "auto",
+  "state": "present",
+  "deployBranch": "main",
+  "services": {
+    "web": {
+      "type": "web",
+      "build": {
+        "context": ".",
+        "dockerfile": "Dockerfile"
+      },
+      "port": 8080,
+      "domain": "auto",
+      "health": {
+        "path": "/healthz",
+        "status": 200
+      },
+      "resources": {
+        "memoryMiB": 192,
+        "cpu": 0.5,
+        "pids": 128
+      },
+      "environment": {},
+      "secretRefs": {}
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "paas.json",
+        "examples/*.json"
+      ],
+      "url": "./schema/paas.v1.json"
+    }
+  ]
+}

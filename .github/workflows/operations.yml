@@ -1,0 +1,29 @@
+name: PaaS operations
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Fixed platform operation
+        type: choice
+        options: [status, routes, history, logs, start, stop, restart, delete, cleanup-images, redeploy, rollback, backup, backups, download-backup, restore, database-upgrade]
+        default: status
+      service: {description: Named service, default: web, type: string}
+      release-id: {description: Rollback release ID, type: string}
+      image: {description: Approved database image digest, type: string}
+      backup-id: {description: Backup ID, type: string}
+      confirm: {description: 'Restore requires RESTORE <repository ID>', type: string}
+permissions:
+  contents: read
+  id-token: write
+  actions: read
+jobs:
+  operate:
+    uses: Deploy-ryanl-in/personal-paas/.github/workflows/operate.yml@f33657fd7ce6e4cd4d018d72f2f23b37a0842755
+    with:
+      deployment-url: https://deploy.ryanl.in
+      action: ${{ inputs.action }}
+      service: ${{ inputs.service }}
+      release-id: ${{ inputs.release-id }}
+      image: ${{ inputs.image }}
+      backup-id: ${{ inputs.backup-id }}
+      confirm: ${{ inputs.confirm }}
