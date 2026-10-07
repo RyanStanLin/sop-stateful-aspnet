@@ -8,3 +8,8 @@ TestResults/
 local-data/
 
 paas.secrets.json
+
+.env*
+!.env.example
+local-data/
+paas.secrets.json

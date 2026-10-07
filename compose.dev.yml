@@ -1,0 +1,38 @@
+# Local development only; this file is never sent to the VPS deployment API.
+services:
+  postgres:
+    image: postgres:18.3-bookworm@sha256:80630f83606d8db77d30b3851b16a9f78be2d0d4dda6f7b82a1fdca5ebe3acba
+    user: "999:999"
+    environment:
+      POSTGRES_USER: ${DATABASE_USER:-app}
+      POSTGRES_DB: ${DATABASE_NAME:-app}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Run scripts/create-local-env.py first}
+    ports: ["127.0.0.1:15432:5432"]
+    volumes: ["postgres-dev:/var/lib/postgresql"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  redis:
+    image: redis:8.2.2-bookworm@sha256:4521b581dbddea6e7d81f8fe95ede93f5648aaa66a9dacd581611bf6fe7527bd
+    user: "999:999"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?Run scripts/create-local-env.py first}
+    command:
+      - sh
+      - -ec
+      - |
+        umask 077
+        printf 'requirepass "%s"\nappendonly yes\nmaxmemory 32mb\nmaxmemory-policy noeviction\n' "$$REDIS_PASSWORD" > /tmp/redis.conf
+        exec redis-server /tmp/redis.conf
+    ports: ["127.0.0.1:16379:6379"]
+    volumes: ["redis-dev:/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=$$REDIS_PASSWORD redis-cli ping | grep -q PONG"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+volumes:
+  postgres-dev:
+  redis-dev:

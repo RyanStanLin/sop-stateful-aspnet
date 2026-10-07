@@ -6,6 +6,13 @@ on:
 permissions:
   contents: read
 jobs:
+  invalidate_cache:
+    if: github.event_name == 'push' && !github.event.repository.is_template
+    permissions: {contents: read, actions: read, id-token: write}
+    uses: Deploy-ryanl-in/personal-paas/.github/workflows/operate.yml@e91c3f0942fe0a2ed0199d2173cbd7a26a55c4e4
+    with:
+      deployment-url: https://deploy.ryanl.in
+      action: clear-route-cache
   test:
     runs-on: ubuntu-24.04
     steps:
@@ -17,19 +24,23 @@ jobs:
       - run: dotnet format --no-restore --verify-no-changes
       - run: dotnet build --no-restore -c Release
       - run: dotnet test --no-build --no-restore -c Release
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: {node-version: '24.21.0'}
+      - name: Local PostgreSQL Redis JSON and WebSocket integration
+        run: bash scripts/local-smoke.sh
   release:
-    needs: test
+    needs: [test, invalidate_cache]
     if: github.event_name == 'push' && !github.event.repository.is_template
     permissions:
       contents: read
       packages: write
       actions: read
       id-token: write
-    uses: Deploy-ryanl-in/personal-paas/.github/workflows/release.yml@f33657fd7ce6e4cd4d018d72f2f23b37a0842755
+    uses: Deploy-ryanl-in/personal-paas/.github/workflows/release.yml@e91c3f0942fe0a2ed0199d2173cbd7a26a55c4e4
     with:
       deployment-url: https://deploy.ryanl.in
       domain: ryanl.in
       platform-repository: Deploy-ryanl-in/personal-paas
-      platform-sha: f33657fd7ce6e4cd4d018d72f2f23b37a0842755
+      platform-sha: e91c3f0942fe0a2ed0199d2173cbd7a26a55c4e4
     secrets:
       PAAS_SECRETS: ${{ secrets.PAAS_SECRETS }}

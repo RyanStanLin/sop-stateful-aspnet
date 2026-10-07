@@ -5,8 +5,9 @@ on:
       action:
         description: Fixed platform operation
         type: choice
-        options: [status, routes, history, logs, start, stop, restart, delete, cleanup-images, redeploy, rollback, backup, backups, download-backup, restore, database-upgrade]
+        options: [status, routes, route-cache, clear-route-cache, history, logs, start, stop, restart, delete, cleanup-images, redeploy, rollback, backup, backups, download-backup, restore, database-upgrade]
         default: status
+      domain: {description: 'Cache domain (empty means all domains of this repository)', type: string}
       service: {description: Named service, default: web, type: string}
       release-id: {description: Rollback release ID, type: string}
       image: {description: Approved database image digest, type: string}
@@ -18,10 +19,11 @@ permissions:
   actions: read
 jobs:
   operate:
-    uses: Deploy-ryanl-in/personal-paas/.github/workflows/operate.yml@f33657fd7ce6e4cd4d018d72f2f23b37a0842755
+    uses: Deploy-ryanl-in/personal-paas/.github/workflows/operate.yml@e91c3f0942fe0a2ed0199d2173cbd7a26a55c4e4
     with:
       deployment-url: https://deploy.ryanl.in
       action: ${{ inputs.action }}
+      domain: ${{ inputs.domain }}
       service: ${{ inputs.service }}
       release-id: ${{ inputs.release-id }}
       image: ${{ inputs.image }}

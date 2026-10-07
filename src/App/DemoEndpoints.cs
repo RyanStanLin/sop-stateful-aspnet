@@ -10,7 +10,7 @@ public static class DemoEndpoints
     public static void MapDemo(this WebApplication app)
     {
         app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(20) });
-        app.Map("/ws", async context =>
+        async Task Echo(HttpContext context)
         {
             if (!context.WebSockets.IsWebSocketRequest) { context.Response.StatusCode = 400; return; }
             using var socket = await context.WebSockets.AcceptWebSocketAsync();
@@ -37,7 +37,9 @@ public static class DemoEndpoints
                 }
             }
             catch (Exception exception) when (exception is WebSocketException or OperationCanceledException) { }
-        });
+        }
+        app.Map("/ws", Echo);
+        app.Map("/ws/user", Echo);
         var data = app.MapGroup("/api/data").AddEndpointFilter(async (context, next) =>
         {
             var configuration = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
