@@ -110,6 +110,5 @@
         "REDIS_PASSWORD": "REDIS_PASSWORD"
       }
     }
-  },
-  "cacheProofInvalidField": true
+  }
 }

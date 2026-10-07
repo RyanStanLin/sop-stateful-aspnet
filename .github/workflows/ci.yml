@@ -9,7 +9,7 @@ jobs:
   invalidate_cache:
     if: github.event_name == 'push' && !github.event.repository.is_template
     permissions: {contents: read, actions: read, id-token: write}
-    uses: Deploy-ryanl-in/personal-paas/.github/workflows/operate.yml@e91c3f0942fe0a2ed0199d2173cbd7a26a55c4e4
+    uses: Deploy-ryanl-in/personal-paas/.github/workflows/operate.yml@472a450fa4a7f8caca1b8b7c2b451eb7758dc442
     with:
       deployment-url: https://deploy.ryanl.in
       action: clear-route-cache
@@ -36,11 +36,11 @@ jobs:
       packages: write
       actions: read
       id-token: write
-    uses: Deploy-ryanl-in/personal-paas/.github/workflows/release.yml@e91c3f0942fe0a2ed0199d2173cbd7a26a55c4e4
+    uses: Deploy-ryanl-in/personal-paas/.github/workflows/release.yml@472a450fa4a7f8caca1b8b7c2b451eb7758dc442
     with:
       deployment-url: https://deploy.ryanl.in
       domain: ryanl.in
       platform-repository: Deploy-ryanl-in/personal-paas
-      platform-sha: e91c3f0942fe0a2ed0199d2173cbd7a26a55c4e4
+      platform-sha: 472a450fa4a7f8caca1b8b7c2b451eb7758dc442
     secrets:
       PAAS_SECRETS: ${{ secrets.PAAS_SECRETS }}
