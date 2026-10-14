@@ -2,6 +2,6 @@
   <PropertyGroup><UserSecretsId>personal-paas-aspnet-local</UserSecretsId></PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Npgsql" Version="10.0.3" />
-    <PackageReference Include="StackExchange.Redis" Version="3.3.1" />
+    <PackageReference Include="StackExchange.Redis" Version="3.4.5" />
   </ItemGroup>
 </Project>
