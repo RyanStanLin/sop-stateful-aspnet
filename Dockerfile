@@ -5,7 +5,7 @@ COPY src/App/App.csproj src/App/packages.lock.json ./src/App/
 RUN dotnet restore src/App/App.csproj --locked-mode
 COPY src/ ./src/
 RUN dotnet publish src/App/App.csproj -c Release --no-restore -o /out /p:UseAppHost=false
-FROM mcr.microsoft.com/dotnet/aspnet:10.0.12-noble@sha256:222759b391a1aaf241166672c8f99b2d4ada452e7b5319f3c6e8f265a37b5ad4 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.13-noble@sha256:d5633778c754e89a386882eddf8dbee6942447a8a4b8267c19cf1e1158d0b0ac AS runtime
 WORKDIR /app
 COPY --from=build /out ./
 ENV ASPNETCORE_HTTP_PORTS=8080 DOTNET_EnableDiagnostics=0 DOTNET_BUNDLE_EXTRACT_BASE_DIR=/tmp/dotnet
